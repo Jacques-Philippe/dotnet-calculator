@@ -27,8 +27,8 @@ IdentitiesOnly yes
 
 This was a really awful thing to be stuck on for this long, jeez.
 
-By the way, even after being able to push, git was asking me for my username and password each time, which is far from ideal. To stop this happening, we can store our credentials forever via git credential manager.
+By the way, even after being able to push, git was asking me for my username and password each time, which is far from ideal. To stop this happening, we can update the remote url to have the following pattern.
 
 ```
-git config credential.helper store
+git remote set-url origin git@github.com:username/repo.git
 ```
