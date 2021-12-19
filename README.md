@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/jacquespamiot/calculator/_apis/build/status/Jacques-Philippe.dotnet-calculator?branchName=master)](https://dev.azure.com/jacquespamiot/calculator/_build/latest?definitionId=1&branchName=master)
+
 # What I'm hoping to achieve with this repo
 A dotnet application hooked up to a full CICD pipeline.
 
@@ -8,6 +10,8 @@ I'll make a simple calculator class library which will be consumed by a console 
     |--- class library
     |--- unit testing class library
     |--- console application (consumes class library)
+    
+What's different about this project is that it's public. The advantage to making projects public like this is that if you use resources which promote open-source software, i.e. GitHub, Azure DevOps, then you can do some pretty nifty things without spending anything. It just needs to be publicly available. To that end, in order to use Azure DevOps pipelines for free, we need to make a parallelism request [make your request here](https://aka.ms/azpipelines-parallelism-request).
 
 # Issues I had along the way
 ## Authenticating with Github
