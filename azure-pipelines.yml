@@ -1,16 +1,49 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# On new commit to master, trigger another pipeline run
 trigger:
-- master
+  - master
 
 pool:
   vmImage: ubuntu-latest
 
+# Make Release builds
+variables:
+  buildConfiguration: 'Release'
+
 steps:
-- script: dotnet build
-  displayName: 'Build solution'
-- script: dotnet test
-  displayName: 'Run unit tests'
+  # Build the project
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Build'
+    inputs:
+      command: 'build'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: 'CommonLib/CommonLib.csproj'
+
+    # Run unit tests
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Unit Tests'
+    inputs:
+      command: 'test'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: 'CommonLib/CommonLib.csproj'
+
+    # Bundle the project into a NuGet package
+  - task: DotNetCoreCLI@2
+    displayName: '.NET pack project'
+    inputs:
+      command: 'pack'
+      arguments: '--configuration $(buildConfiguration)'
+      packagesToPack: 'Consumer/Consumer.csproj'
+      nobuild: true
+      versioningScheme: 'off'
+
+  # Push to NuGet package to our Azure feed, CalculatorFeed
+  - task: NuGetCommand@2
+    displayName: 'nuget push'
+    inputs:
+      command: 'push'
+      feedsToUse: 'select'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'CalculatorFeed'
+      versioningScheme: 'off'
+      allowPackageConflicts: true
