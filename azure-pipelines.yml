@@ -18,10 +18,10 @@ steps:
       arguments: '--configuration $(buildConfiguration)'
       projects: 'Consumer/Consumer.csproj'
 
-  - task: CmdLine@2
-    displayName: 'Check directory contents'
-    inputs:
-      script: ls
+  # - task: CmdLine@2
+  #   displayName: 'Check directory contents'
+  #   inputs:
+  #     script: ls
 
     # Run unit tests
   - task: DotNetCoreCLI@2
@@ -29,7 +29,7 @@ steps:
     inputs:
       command: 'test'
       arguments: '--configuration $(buildConfiguration)'
-      projects: '*Test*.csproj'
+      projects: 'Calculator.Tests/Calculator.Tests.csproj'
 
     # Bundle the project into a NuGet package
   - task: DotNetCoreCLI@2
