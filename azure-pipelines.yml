@@ -25,6 +25,14 @@ steps:
   #   inputs:
   #     script: ls
 
+
+  # Build the project
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Restore Tests'
+    inputs:
+      command: 'restore'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: 'Calculator.Tests/Calculator.Tests.csproj'
   # Build the project
   - task: DotNetCoreCLI@2
     displayName: '.NET Build Tests'
