@@ -36,11 +36,23 @@ steps:
       nobuild: true
       versioningScheme: 'off'
 
-  # Push to NuGet package to our Azure feed, CalculatorFeed
-  - task: DotNetCoreCLI@2
-    displayName: '.NET Push NuGet Package'
-    inputs:
-      command: 'push'
-      feedsToUse: 'select'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-      feedPublish: 'CalculatorFeed'
+  # # Push to NuGet package to our Azure feed, CalculatorFeed
+  # - task: DotNetCoreCLI@2
+  #   displayName: '.NET Push NuGet Package'
+  #   inputs:
+  #     command: 'push'
+  #     feedsToUse: 'select'
+  #     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+  #     feedPublish: 'CalculatorFeed'
+
+  - task: NuGetCommand@2
+  displayName: 'Push NuGet Package'
+  inputs:
+    command: 'push'
+    feedsToUse: 'select'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    vstsFeed: calculator/CalculatorFeed
+    publishVstsFeed: calculator/CalculatorFeed
+    versioningScheme: 'off'
+    allowPackageConflicts: true
