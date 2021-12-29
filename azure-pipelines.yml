@@ -10,12 +10,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-  - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK'
-    inputs:
-      version: 5.0.x
-      performMultiLevelLookup: true
-      includePreviewVersions: true # Required for preview versions
+
 
   # Build the project
   - task: DotNetCoreCLI@2
@@ -30,6 +25,13 @@ steps:
   #   inputs:
   #     script: ls
 
+  # Build the project
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Build Tests'
+    inputs:
+      command: 'build'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: 'Calculator.Tests/Calculator.Tests.csproj'
     # Run unit tests
   - task: DotNetCoreCLI@2
     displayName: '.NET Unit Tests'
