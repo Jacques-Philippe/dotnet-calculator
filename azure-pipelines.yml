@@ -18,6 +18,11 @@ steps:
       arguments: '--configuration $(buildConfiguration)'
       projects: 'Consumer/Consumer.csproj'
 
+- task: CmdLine@2
+  displayName: 'Check directory contents'
+  inputs:
+    script: ls
+
     # Run unit tests
   - task: DotNetCoreCLI@2
     displayName: '.NET Unit Tests'
