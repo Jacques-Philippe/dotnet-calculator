@@ -3,7 +3,7 @@ trigger:
   - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-latest'
 
 # Make Release builds
 variables:
