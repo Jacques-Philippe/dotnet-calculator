@@ -16,7 +16,7 @@ steps:
     inputs:
       command: 'build'
       arguments: '--configuration $(buildConfiguration)'
-      projects: 'CommonLib/CommonLib.csproj'
+      projects: 'Consumer/Consumer.csproj'
 
     # Run unit tests
   - task: DotNetCoreCLI@2
@@ -24,7 +24,7 @@ steps:
     inputs:
       command: 'test'
       arguments: '--configuration $(buildConfiguration)'
-      projects: 'CommonLib/CommonLib.csproj'
+      projects: '*Test/*Test.csproj'
 
     # Bundle the project into a NuGet package
   - task: DotNetCoreCLI@2
