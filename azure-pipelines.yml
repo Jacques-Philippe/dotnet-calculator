@@ -24,7 +24,7 @@ steps:
     inputs:
       command: 'test'
       arguments: '--configuration $(buildConfiguration)'
-      projects: '*Test/*Test.csproj'
+      projects: '*Test.csproj'
 
     # Bundle the project into a NuGet package
   - task: DotNetCoreCLI@2
@@ -37,13 +37,10 @@ steps:
       versioningScheme: 'off'
 
   # Push to NuGet package to our Azure feed, CalculatorFeed
-  - task: NuGetCommand@2
-    displayName: 'nuget push'
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Push NuGet Package'
     inputs:
       command: 'push'
       feedsToUse: 'select'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-      nuGetFeedType: 'internal'
-      publishVstsFeed: 'CalculatorFeed'
-      versioningScheme: 'off'
-      allowPackageConflicts: true
+      feedPublish: 'CalculatorFeed'
