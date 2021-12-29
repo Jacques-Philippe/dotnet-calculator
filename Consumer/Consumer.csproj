@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>Test-CalculatorApp</PackageId>
-    <Version>0.0.0</Version>
+    <Version>0.0.1</Version>
     <Authors>Jacques-Philippe Amiot</Authors>
     <Company>Not A Company Inc.</Company>
     <OutputType>Exe</OutputType>

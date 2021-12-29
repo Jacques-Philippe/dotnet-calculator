@@ -3,28 +3,50 @@ trigger:
   - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-latest'
 
 # Make Release builds
 variables:
   buildConfiguration: 'Release'
 
 steps:
+
+
   # Build the project
   - task: DotNetCoreCLI@2
     displayName: '.NET Build'
     inputs:
       command: 'build'
       arguments: '--configuration $(buildConfiguration)'
-      projects: 'CommonLib/CommonLib.csproj'
+      projects: 'Consumer/Consumer.csproj'
 
+  # - task: CmdLine@2
+  #   displayName: 'Check directory contents'
+  #   inputs:
+  #     script: ls
+
+
+  # Build the project
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Restore Tests'
+    inputs:
+      command: 'restore'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: 'Calculator.Tests/Calculator.Tests.csproj'
+  # Build the project
+  - task: DotNetCoreCLI@2
+    displayName: '.NET Build Tests'
+    inputs:
+      command: 'build'
+      arguments: '--configuration $(buildConfiguration)'
+      projects: 'Calculator.Tests/Calculator.Tests.csproj'
     # Run unit tests
   - task: DotNetCoreCLI@2
     displayName: '.NET Unit Tests'
     inputs:
       command: 'test'
       arguments: '--configuration $(buildConfiguration)'
-      projects: 'CommonLib/CommonLib.csproj'
+      projects: 'Calculator.Tests/Calculator.Tests.csproj'
 
     # Bundle the project into a NuGet package
   - task: DotNetCoreCLI@2
@@ -36,14 +58,14 @@ steps:
       nobuild: true
       versioningScheme: 'off'
 
-  # Push to NuGet package to our Azure feed, CalculatorFeed
   - task: NuGetCommand@2
-    displayName: 'nuget push'
+    displayName: 'Push NuGet Package'
     inputs:
       command: 'push'
       feedsToUse: 'select'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
-      publishVstsFeed: 'CalculatorFeed'
+      vstsFeed: calculator/CalculatorFeed
+      publishVstsFeed: calculator/CalculatorFeed
       versioningScheme: 'off'
       allowPackageConflicts: true
